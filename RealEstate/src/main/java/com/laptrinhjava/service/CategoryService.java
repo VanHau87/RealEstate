@@ -1,5 +1,9 @@
 package com.laptrinhjava.service;
 
-public interface CategoryService {
+import java.util.List;
 
+import com.laptrinhjava.dto.CategoryDTO;
+
+public interface CategoryService {
+	List<CategoryDTO> findAll();
 }
