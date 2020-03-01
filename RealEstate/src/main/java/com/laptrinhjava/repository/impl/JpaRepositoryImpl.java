@@ -7,22 +7,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.laptrinhjava.entity.CategoryEntity;
-import com.laptrinhjava.repository.CategoryRepository;
+import com.laptrinhjava.mapper.RowMapper;
 import com.laptrinhjava.repository.EntityManagerFactory;
+import com.laptrinhjava.repository.JpaRepository;
 
-public class CategoryRepositoryImpl implements CategoryRepository {
+public class JpaRepositoryImpl<T> implements JpaRepository<T> {
 
 	@Override
-	public List<CategoryEntity> findAll() {
-		/*Login code:
-		 * 	- execute query statement => get data and put into ResultSet
-		 *  - go into ResultSet, loop through every row
-		 *  	- in row: get value in every column (based on the column name) => put into properties of java object 
-		 * */
-		List<CategoryEntity> entities = new ArrayList<CategoryEntity>();
+	public List<T> findAll(String sql, RowMapper<T> rowMapper) {
+		List<T> entities = new ArrayList<T>();
 		Connection connection = EntityManagerFactory.getConnection();
-		String sql = "SELECT * FROM category";
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
 		if (connection != null) {
@@ -30,15 +24,11 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 				statement = connection.prepareStatement(sql);
 				resultSet = statement.executeQuery();
 				while (resultSet.next()) {
-					CategoryEntity entity = new CategoryEntity();
-					entity.setCatId(resultSet.getInt("catid"));
-					entity.setCode(resultSet.getString("code"));
-					entity.setName(resultSet.getString("name"));
-					entities.add(entity);
+					entities.add(rowMapper.mapRow(resultSet));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
-				return new ArrayList<CategoryEntity>();
+				return new ArrayList<T>();
 			} finally {
 				try {
 					if (resultSet != null) {
@@ -52,12 +42,12 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 					}
 				} catch (SQLException e) {
 					e.printStackTrace();
-					return new ArrayList<CategoryEntity>();
+					return new ArrayList<T>();
 				}
 				
 			}
 		}
-		return entities;
+		return null;
 	}
-
+	
 }
