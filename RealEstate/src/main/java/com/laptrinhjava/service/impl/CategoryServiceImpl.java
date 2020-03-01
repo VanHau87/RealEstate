@@ -12,15 +12,20 @@ import com.laptrinhjava.service.CategoryService;
 
 public class CategoryServiceImpl implements CategoryService {
 	
-	private CategoryRepository categoryService = new CategoryRepositoryImpl();
+	private CategoryRepository categoryRepository = new CategoryRepositoryImpl();
 	
 	@Override
 	public List<CategoryDTO> findAll() {
 		List<CategoryDTO> dtos = new ArrayList<CategoryDTO>();
-		List<CategoryEntity> entities = categoryService.findAll();
+		List<CategoryEntity> entities = categoryRepository.findAll();
 		entities.stream().map(item -> CategoryConverter.entity2DTO(item))
 		.forEach(item ->dtos.add(item));
 		return dtos;
+	}
+
+	@Override
+	public void saveCategory(CategoryDTO dto) {
+		categoryRepository.saveCategory(CategoryConverter.dto2Entity(dto));
 	}
 
 }

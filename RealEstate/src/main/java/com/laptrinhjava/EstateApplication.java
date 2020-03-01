@@ -19,7 +19,13 @@ public class EstateApplication {
 			System.out.println(categoryDTO.getCode());
 			System.out.println(categoryDTO.getName());
 		}*/
+		CategoryDTO dto = new CategoryDTO();
+		dto.setCode("phap-luat");
+		dto.setName("Pháp luật");
+		categoryService.saveCategory(dto);
+		
 		NewsService newsService = new NewsServiceImpl();
+		/*
 		List<NewsDTO> results = newsService.findAllNews();
 		for (NewsDTO newsDTO : results) {
 			System.out.println(newsDTO.getNewsId());
@@ -27,6 +33,6 @@ public class EstateApplication {
 			System.out.println(newsDTO.getShortDescription());
 			System.out.println(newsDTO.getContent());
 			System.out.println("**************");
-		}
+		}*/
 	}
 }

@@ -60,4 +60,42 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 		return entities;
 	}
 
+	@Override
+	public void saveCategory(CategoryEntity entity) {
+		Connection connection = EntityManagerFactory.getConnection();;
+		PreparedStatement statement = null;
+		String sql = "INSERT INTO category(code, name) VALUES(?, ?)";
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(sql);
+			statement.setString(1, entity.getCode());
+			statement.setString(2, entity.getName());
+			statement.executeUpdate();
+			connection.commit();
+		} catch (SQLException e) {
+			if (connection != null) {
+				try {
+					connection.rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		
+	}
+
 }

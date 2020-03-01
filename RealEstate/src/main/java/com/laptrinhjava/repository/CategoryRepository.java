@@ -6,4 +6,5 @@ import com.laptrinhjava.entity.CategoryEntity;
 
 public interface CategoryRepository {
 	List<CategoryEntity> findAll();
+	void saveCategory(CategoryEntity entity);
 }

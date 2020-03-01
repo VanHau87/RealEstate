@@ -11,5 +11,10 @@ public class NewsRepositoryImpl extends JpaRepositoryImpl<NewsEntity> implements
 	public List<NewsEntity> findAllNews() {
 		return super.findAll();
 	}
+
+	@Override
+	public void saveNews(NewsEntity entity) {
+		
+	}
 	
 }
