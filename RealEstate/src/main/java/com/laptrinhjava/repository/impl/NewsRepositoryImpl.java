@@ -14,7 +14,7 @@ public class NewsRepositoryImpl extends JpaRepositoryImpl<NewsEntity> implements
 
 	@Override
 	public void saveNews(NewsEntity entity) {
-		
+		super.insert(entity);
 	}
 	
 }

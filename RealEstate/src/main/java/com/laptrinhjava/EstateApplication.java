@@ -34,5 +34,10 @@ public class EstateApplication {
 			System.out.println(newsDTO.getContent());
 			System.out.println("**************");
 		}*/
+		NewsDTO dtoNews = new NewsDTO();
+		dtoNews.setTitle("Xã hội học");
+		dtoNews.setShortDescription("Miêu tả xhh");
+		dtoNews.setContent("Nội dung xã hội học");
+		newsService.saveNews(dtoNews);
 	}
 }

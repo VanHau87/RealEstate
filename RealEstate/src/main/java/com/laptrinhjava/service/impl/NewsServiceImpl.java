@@ -21,5 +21,9 @@ public class NewsServiceImpl implements NewsService {
 		}
 		return dtos;
 	}
+	@Override
+	public void saveNews(NewsDTO dto) {
+		newsRepository.saveNews(NewsConverter.dto2Entity(dto));	
+	}
 
 }
