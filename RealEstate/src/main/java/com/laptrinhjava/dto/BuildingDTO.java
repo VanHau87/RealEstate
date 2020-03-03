@@ -1,8 +1,6 @@
 package com.laptrinhjava.dto;
 
-import java.sql.Timestamp;
-
-public class BuildingDTO {
+public class BuildingDTO extends BaseDTO{
 	private Long buildingId;
 	private String name;
 	private String ward;
@@ -28,10 +26,6 @@ public class BuildingDTO {
 	private String timeDecorator;
 	private String managerName;
 	private String managerPhone;
-	private Timestamp createdDate;
-	private Timestamp modifiedDate;
-	private String createdBy;
-	private String modifiedBy;
 	
 	public Long getBuildingId() {
 		return buildingId;
@@ -182,29 +176,5 @@ public class BuildingDTO {
 	}
 	public void setManagerPhone(String managerPhone) {
 		this.managerPhone = managerPhone;
-	}
-	public Timestamp getCreatedDate() {
-		return createdDate;
-	}
-	public void setCreatedDate(Timestamp createdDate) {
-		this.createdDate = createdDate;
-	}
-	public Timestamp getModifiedDate() {
-		return modifiedDate;
-	}
-	public void setModifiedDate(Timestamp modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
-	public String getCreatedBy() {
-		return createdBy;
-	}
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-	public String getModifiedBy() {
-		return modifiedBy;
-	}
-	public void setModifiedBy(String modifiedBy) {
-		this.modifiedBy = modifiedBy;
 	}
 }

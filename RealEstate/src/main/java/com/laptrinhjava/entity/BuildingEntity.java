@@ -1,14 +1,12 @@
 package com.laptrinhjava.entity;
 
-import java.sql.Timestamp;
-
 import com.laptrinhjava.annotation.Column;
 import com.laptrinhjava.annotation.Entity;
 import com.laptrinhjava.annotation.Table;
 
 @Entity
 @Table(name = "building")
-public class BuildingEntity {
+public class BuildingEntity extends BaseEntity{
 	@Column(name = "buildingid")
 	private Long buildingId;
 	
@@ -83,18 +81,6 @@ public class BuildingEntity {
 
 	@Column(name = "managerphone")
 	private String managerPhone;
-	
-	@Column(name = "createddate")
-	private Timestamp createdDate;
-	
-	@Column(name = "modifieddate")
-	private Timestamp modifiedDate;
-	
-	@Column(name = "createdby")
-	private String createdBy;
-	
-	@Column(name = "modifiedby")
-	private String modifiedBy;
 
 	public Long getBuildingId() {
 		return buildingId;
@@ -294,37 +280,5 @@ public class BuildingEntity {
 
 	public void setManagerPhone(String managerPhone) {
 		this.managerPhone = managerPhone;
-	}
-
-	public Timestamp getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Timestamp createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public Timestamp getModifiedDate() {
-		return modifiedDate;
-	}
-
-	public void setModifiedDate(Timestamp modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public String getModifiedBy() {
-		return modifiedBy;
-	}
-
-	public void setModifiedBy(String modifiedBy) {
-		this.modifiedBy = modifiedBy;
 	}
 }
