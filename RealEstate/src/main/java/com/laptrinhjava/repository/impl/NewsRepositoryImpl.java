@@ -9,7 +9,7 @@ public class NewsRepositoryImpl extends JpaRepositoryImpl<NewsEntity> implements
 
 	@Override
 	public List<NewsEntity> findAllNews() {
-		return super.findAll();
+		return null;
 	}
 
 	@Override

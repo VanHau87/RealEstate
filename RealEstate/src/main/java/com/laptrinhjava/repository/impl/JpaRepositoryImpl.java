@@ -7,8 +7,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.laptrinhjava.annotation.Column;
 import com.laptrinhjava.annotation.Table;
@@ -28,7 +30,7 @@ public class JpaRepositoryImpl<T> implements JpaRepository<T> {
 	}
 	
 	@Override
-	public List<T> findAll() {
+	public List<T> findAll(Map<String, Object> params, Object ...where) {
 		ResultSetMapper<T> resultSetMapper = new ResultSetMapper<>();
 		Connection connection = EntityManagerFactory.getConnection();
 		PreparedStatement statement = null;
@@ -40,8 +42,9 @@ public class JpaRepositoryImpl<T> implements JpaRepository<T> {
 					tableName = zClass.getAnnotation(Table.class).name();
 				}
 				StringBuilder sql = new StringBuilder("SELECT * FROM ");
-				sql.append(tableName);
-				statement = connection.prepareStatement(sql.toString());
+				sql.append(tableName).append(" A WHERE 1=1");
+				StringBuilder sqlBuilder = createSQLFindAllCommon(sql, params);
+				statement = connection.prepareStatement(sqlBuilder.toString());
 				resultSet = statement.executeQuery();
 				return resultSetMapper.mapRow(resultSet, zClass);
 			} catch (SQLException e) {
@@ -66,6 +69,29 @@ public class JpaRepositoryImpl<T> implements JpaRepository<T> {
 			}
 		}
 		return null;
+	}
+
+	protected StringBuilder createSQLFindAllCommon(StringBuilder sqlBuilder, Map<String, Object> params) {
+		if (params != null && params.size() > 0) {
+			String[] keys = new String[params.size()];
+			Object[] values = new Object[params.size()];
+			int index = 0;
+			for (Map.Entry<String, Object> item : params.entrySet()) {
+				keys[index] = item.getKey();
+				values[index] = item.getValue();
+				index++;
+			}
+			for (int i = 0; i < keys.length; i++) {
+				if (values[i] instanceof String) {
+					sqlBuilder.append(" AND A.").append(keys[i]);
+					sqlBuilder.append(" LIKE '%").append(values[i]).append("%'");
+				} else {
+					sqlBuilder.append(" AND A.").append(keys[i]);
+					sqlBuilder.append(" = ").append(values[i]);
+				}
+			}
+		}
+		return sqlBuilder;
 	}
 
 	@Override
@@ -169,5 +195,43 @@ public class JpaRepositoryImpl<T> implements JpaRepository<T> {
 		sql.append("(").append(fields.toString()).append(")");
 		sql.append(" VALUES(").append(params.toString()).append(")");
 		return sql;
+	}
+
+	@Override
+	public List<T> findAll(String sql) {
+		ResultSetMapper<T> resultSetMapper = new ResultSetMapper<>();
+		Connection connection = EntityManagerFactory.getConnection();
+		//PreparedStatement statement = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+		if (connection != null) {
+			try {
+				//statement = connection.prepareStatement(sql.toString());
+				statement = connection.createStatement();
+				//resultSet = statement.executeQuery();
+				resultSet = statement.executeQuery(sql);
+				return resultSetMapper.mapRow(resultSet, zClass);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return new ArrayList<T>();
+			} finally {
+				try {
+					if (resultSet != null) {
+						resultSet.close();
+					}
+					if (statement != null) {
+						statement.close();
+					}
+					if (connection != null) {
+						connection.close();
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+					return new ArrayList<T>();
+				}
+				
+			}
+		}
+		return null;
 	}
 }
