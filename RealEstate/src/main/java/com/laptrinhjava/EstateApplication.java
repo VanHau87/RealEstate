@@ -1,5 +1,6 @@
 package com.laptrinhjava;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.laptrinhjava.builder.BuildingSearchBuilder;
@@ -16,20 +17,23 @@ import com.laptrinhjava.service.impl.NewsServiceImpl;
 public class EstateApplication {
 	
 	public static void main(String[] args) {
-		CategoryService categoryService = new CategoryServiceImpl();
+		
 		/*
+		 * CategoryService categoryService = new CategoryServiceImpl();
 		List<CategoryDTO> results = categoryService.findAll();
 		for (CategoryDTO categoryDTO : results) {
 			System.out.println(categoryDTO.getCode());
 			System.out.println(categoryDTO.getName());
 		}*/
+		/*
 		CategoryDTO dto = new CategoryDTO();
 		dto.setCode("phap-luat");
 		dto.setName("Pháp luật");
 		categoryService.saveCategory(dto);
+		*/
 		
-		NewsService newsService = new NewsServiceImpl();
 		/*
+		 * NewsService newsService = new NewsServiceImpl();
 		List<NewsDTO> results = newsService.findAllNews();
 		for (NewsDTO newsDTO : results) {
 			System.out.println(newsDTO.getNewsId());
@@ -45,6 +49,7 @@ public class EstateApplication {
 		dtoNews.setContent("Nội dung xã hội học");
 		newsService.saveNews(dtoNews);
 		*/
+		
 		BuildingService buildingService = new BuildingServiceImpl();
 		String name = "tower";
 		String district = "";
@@ -73,5 +78,23 @@ public class EstateApplication {
 			System.out.println(buildingDTO.getName());
 			System.out.println(buildingDTO.getCreatedDate());
 		}
+		/*
+		BuildingDTO dto = new BuildingDTO();
+		dto.setName("ABCD Tower");
+		dto.setDistrict("Phường 2");
+		dto.setStreet("108 Lý Chính Thắng");
+		dto.setNumberOfBasement(2);
+		dto.setFloorarea(500);
+		dto.setRentCost(10);
+		dto.setCostDescription("10 triệu/m2");
+		dto.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+		dto.setCreatedBy("Nhân viên A");
+		BuildingService buildingService = new BuildingServiceImpl();
+		buildingService.saveBuilding(dto);
+		*/
 	}
 }
+
+
+
+

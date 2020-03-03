@@ -52,6 +52,20 @@ public class ResultSetMapper<T> {
 								}
 							}
 						}
+						Class<?> parentClass = zClass.getSuperclass();
+						Field[] fieldsOfParent = parentClass.getDeclaredFields();
+						while (parentClass != null && parentClass != Object.class) {
+							for (Field field : fieldsOfParent) {
+								if (field.isAnnotationPresent(Column.class)) {
+									String propertyOfObject = field.getName();
+									if (columnName.equalsIgnoreCase(propertyOfObject)) {
+										BeanUtils.setProperty(object, propertyOfObject, columnValue);
+										break;
+									}
+								}
+							}
+							parentClass = parentClass.getSuperclass();
+						}
 					}
 					results.add(object);
 				}

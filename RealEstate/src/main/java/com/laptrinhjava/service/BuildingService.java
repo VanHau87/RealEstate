@@ -7,4 +7,5 @@ import com.laptrinhjava.dto.BuildingDTO;
 
 public interface BuildingService {
 	List<BuildingDTO> findByBuilder(BuildingSearchBuilder builder);
+	void saveBuilding(BuildingDTO dto);
 }

@@ -148,6 +148,17 @@ public class JpaRepositoryImpl<T> implements JpaRepository<T> {
 				statement.setObject(index, field.get(object));
 				index++;
 			}
+			Class<?> parentClass = aClass.getSuperclass();
+			int indexParent = fields.length + 1;
+			Field[] fieldsOfParent = parentClass.getDeclaredFields();
+			while (parentClass != null && parentClass != Object.class) {
+				for (Field field : fieldsOfParent) {
+					field.setAccessible(true);
+					statement.setObject(indexParent, field.get(object));
+					indexParent++;
+				}
+				parentClass = parentClass.getSuperclass();
+			}
 			statement.executeUpdate();
 			connection.commit();
 		} catch (SQLException | IllegalArgumentException | IllegalAccessException e) {
@@ -192,6 +203,20 @@ public class JpaRepositoryImpl<T> implements JpaRepository<T> {
 			params.append("?");
 		}
 		sql.append(tableName);
+		Class<?> parentClass = zClass.getSuperclass();
+		while (parentClass != null && parentClass != Object.class) {
+			Field[] fieldsOfParentClass = parentClass.getDeclaredFields();
+			for (Field field : fieldsOfParentClass) {
+				String columnName = field.getAnnotation(Column.class).name();
+				if (fields.length() > 0) {
+					fields.append(",");
+					params.append(",");
+				}
+				fields.append(columnName);
+				params.append("?");
+			}
+			parentClass = parentClass.getSuperclass();
+		}
 		sql.append("(").append(fields.toString()).append(")");
 		sql.append(" VALUES(").append(params.toString()).append(")");
 		return sql;

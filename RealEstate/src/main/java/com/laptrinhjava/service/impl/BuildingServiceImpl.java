@@ -57,5 +57,9 @@ public class BuildingServiceImpl implements BuildingService {
 		}
 		return properties;
 	}
+	@Override
+	public void saveBuilding(BuildingDTO dto) {
+		buildingRepository.insert(BuildingConverter.dto2Entity(dto));	
+	}
 
 }
