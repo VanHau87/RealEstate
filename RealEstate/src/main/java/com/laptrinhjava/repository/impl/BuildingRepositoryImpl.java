@@ -88,4 +88,11 @@ public class BuildingRepositoryImpl extends JpaRepositoryImpl<BuildingEntity> im
 		}
 		return sqlBuilder;
 	}
+
+	@Override
+	public BuildingEntity findById(int id) {
+		String columnName = "buildingid";
+		return super.findById(columnName, id);
+	}
+
 }

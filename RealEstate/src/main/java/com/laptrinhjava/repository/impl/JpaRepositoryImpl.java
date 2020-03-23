@@ -11,9 +11,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.laptrinhjava.annotation.Column;
 import com.laptrinhjava.annotation.Table;
+import com.laptrinhjava.entity.BuildingEntity;
 import com.laptrinhjava.mapper.ResultSetMapper;
 import com.laptrinhjava.repository.EntityManagerFactory;
 import com.laptrinhjava.repository.JpaRepository;
@@ -259,4 +263,143 @@ public class JpaRepositoryImpl<T> implements JpaRepository<T> {
 		}
 		return null;
 	}
+
+	
+	@Override
+	public T findById(String columnName, int id) {
+		ResultSetMapper<T> resultSetMapper = new ResultSetMapper<>();
+		Connection connection = EntityManagerFactory.getConnection();
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		String tableName = "";
+		if (connection != null) {
+			try {
+				if (zClass.isAnnotationPresent(Table.class)) {
+					tableName = zClass.getAnnotation(Table.class).name();
+				}
+				StringBuilder sql = new StringBuilder("SELECT * FROM ");
+				sql.append(tableName).append(" A WHERE A.");
+				sql.append(columnName).append(" = ").append(id);
+				statement = connection.prepareStatement(sql.toString());
+				resultSet = statement.executeQuery();
+				if (resultSet != null) {
+					return resultSetMapper.mapRow(resultSet, zClass).get(0);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return null;
+			} finally {
+				try {
+					if (resultSet != null) {
+						resultSet.close();
+					}
+					if (statement != null) {
+						statement.close();
+					}
+					if (connection != null) {
+						connection.close();
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+					return null;
+				}
+				
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void update(Map<String, String> mapValueUpdate, Long id) {
+		StringBuilder sql = new StringBuilder("UPDATE ");
+		String tableName = "";
+		if (zClass.isAnnotationPresent(Table.class)) {
+			tableName = zClass.getAnnotation(Table.class).name();
+		}
+		sql.append(tableName).append(" A SET ");
+		Set<String> columns = mapValueUpdate.keySet();
+		String setSQL = columns.stream().map(item -> "A." + item + " = ?").collect(Collectors.joining(","));
+		sql.append(setSQL).append(" WHERE A.buildingid = ?");
+		Connection connection = EntityManagerFactory.getConnection();
+		PreparedStatement statement = null;
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(sql.toString());
+			int index = 1;
+			for (Entry<String, String> entry: mapValueUpdate.entrySet()) {
+				statement.setObject(index, entry.getValue());
+				index ++;
+			}
+			statement.setLong(index, id);
+			statement.executeUpdate();
+			connection.commit();
+		} catch (SQLException | IllegalArgumentException e) {
+			try {
+				if (connection != null) {
+					connection.rollback();
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}	
+		}
+		
+	}
+
+	@Override
+	public void delete(Long id) {
+		StringBuilder sql = new StringBuilder("DELETE FROM ");
+		String tableName = "";
+		if (zClass.isAnnotationPresent(Table.class)) {
+			tableName = zClass.getAnnotation(Table.class).name();
+		}
+		sql.append(tableName).append(" A");
+		
+		sql.append(" WHERE A.buildingid = ?");
+		Connection connection = EntityManagerFactory.getConnection();
+		PreparedStatement statement = null;
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(sql.toString());
+			int index = 1;
+			statement.setLong(index, id);
+			statement.executeUpdate();
+			connection.commit();
+		} catch (SQLException | IllegalArgumentException e) {
+			try {
+				if (connection != null) {
+					connection.rollback();
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}	
+		}
+		
+	}
+
+	
+	
 }

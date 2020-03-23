@@ -1,7 +1,10 @@
 package com.laptrinhjava;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.laptrinhjava.builder.BuildingSearchBuilder;
 import com.laptrinhjava.dto.BuildingDTO;
@@ -51,6 +54,7 @@ public class EstateApplication {
 		*/
 		
 		BuildingService buildingService = new BuildingServiceImpl();
+		/*
 		String name = "tower";
 		String district = "";
 		String numberOfBasement = "2";
@@ -78,6 +82,27 @@ public class EstateApplication {
 			System.out.println(buildingDTO.getName());
 			System.out.println(buildingDTO.getCreatedDate());
 		}
+		*/
+		
+		//FIND BY ID and UPDATE
+		/*
+		int id = 6;
+		BuildingDTO dto = buildingService.findById(id);
+		System.out.println(dto.getName());
+		System.out.println(dto.getWard());
+		
+		dto.setName("Number Two Building Tower");
+		dto.setWard("Phường 10");
+		Map<String, String> mapValueUpdate = new HashMap<String, String>();
+		mapValueUpdate.put("name", dto.getName());
+		mapValueUpdate.put("ward", dto.getWard());
+		buildingService.updateBuilding(mapValueUpdate, dto.getBuildingId());
+		System.out.println("done");
+		*/
+		//DELETE
+		Long buildingid = 5L;
+		buildingService.deleteBuilding(buildingid);
+		System.out.println("delete thành công");
 		/*
 		BuildingDTO dto = new BuildingDTO();
 		dto.setName("ABCD Tower");

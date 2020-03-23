@@ -8,4 +8,7 @@ import com.laptrinhjava.entity.BuildingEntity;
 
 public interface BuildingRepository extends JpaRepository<BuildingEntity> {
 	List<BuildingEntity> findBuildingByBuilder(Map<String, Object> params, BuildingSearchBuilder builder);
+
+	BuildingEntity findById(int id);
+
 }

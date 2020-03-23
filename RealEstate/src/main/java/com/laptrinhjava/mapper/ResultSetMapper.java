@@ -30,6 +30,7 @@ public class ResultSetMapper<T> {
 	 * */
 	public List<T> mapRow(ResultSet rs, Class<T> zClass){
 		List<T> results = new ArrayList<>();
+		
 		try {
 			if (zClass.isAnnotationPresent(Entity.class)) {
 				ResultSetMetaData resultSetMetaData = rs.getMetaData();
@@ -76,4 +77,7 @@ public class ResultSetMapper<T> {
 		}
 		return results;
 	}
+	
+	
+	
 }

@@ -61,5 +61,19 @@ public class BuildingServiceImpl implements BuildingService {
 	public void saveBuilding(BuildingDTO dto) {
 		buildingRepository.insert(BuildingConverter.dto2Entity(dto));	
 	}
+	@Override
+	public BuildingDTO findById(int id) {
+		BuildingEntity entity = buildingRepository.findById(id);
+		return BuildingConverter.entity2DTO(entity);
+	}
+	@Override
+	public void updateBuilding(Map<String, String> mapValueUpdate, Long id) {
+		buildingRepository.update(mapValueUpdate, id);
+		
+	}
+	@Override
+	public void deleteBuilding(Long buildingid) {
+		buildingRepository.delete(buildingid);
+	}
 
 }
