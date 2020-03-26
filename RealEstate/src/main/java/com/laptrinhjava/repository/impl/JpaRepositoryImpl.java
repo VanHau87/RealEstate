@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 import com.laptrinhjava.annotation.Column;
 import com.laptrinhjava.annotation.Table;
-import com.laptrinhjava.entity.BuildingEntity;
 import com.laptrinhjava.mapper.ResultSetMapper;
 import com.laptrinhjava.repository.EntityManagerFactory;
 import com.laptrinhjava.repository.JpaRepository;
@@ -400,6 +399,47 @@ public class JpaRepositoryImpl<T> implements JpaRepository<T> {
 		
 	}
 
-	
-	
+	@Override
+	public void deleteByProperty(String property, Object value) {
+		StringBuilder sql = new StringBuilder("DELETE FROM ");
+		String tableName = "";
+		if (zClass.isAnnotationPresent(Table.class)) {
+			tableName = zClass.getAnnotation(Table.class).name();
+		}
+		sql.append(tableName).append(" A");
+		
+		sql.append(" WHERE A.").append(property).append(" LIKE CONCAT('%', ?, '%')");
+		Connection connection = EntityManagerFactory.getConnection();
+		PreparedStatement statement = null;
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(sql.toString());
+			int index = 1;
+			statement.setObject(index, value.toString());
+			statement.executeUpdate();
+			connection.commit();
+		} catch (SQLException | IllegalArgumentException e) {
+			try {
+				if (connection != null) {
+					connection.rollback();
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}	
+		}
+		
+	}
+
 }

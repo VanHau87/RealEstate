@@ -12,4 +12,5 @@ public interface BuildingService {
 	BuildingDTO findById(int id);
 	void updateBuilding(Map<String, String> mapValueUpdate, Long id);
 	void deleteBuilding(Long buildingid);
+	void deleteByProperty(String property, Object value);
 }

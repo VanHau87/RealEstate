@@ -99,9 +99,15 @@ public class EstateApplication {
 		buildingService.updateBuilding(mapValueUpdate, dto.getBuildingId());
 		System.out.println("done");
 		*/
-		//DELETE
+		/*DELETE BY ID
 		Long buildingid = 5L;
 		buildingService.deleteBuilding(buildingid);
+		System.out.println("delete thành công");
+		*/
+		//DELETE BY PROPERTY
+		String property = "type";
+		Object value = "NGUYEN_CAN";
+		buildingService.deleteByProperty(property, value);
 		System.out.println("delete thành công");
 		/*
 		BuildingDTO dto = new BuildingDTO();

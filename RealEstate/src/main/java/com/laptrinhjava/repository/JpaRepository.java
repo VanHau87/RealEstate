@@ -11,4 +11,5 @@ public interface JpaRepository<T> {
 	T findById(String columnName, int id);
 	void update(Map<String, String> mapValueUpdate, Long id);
 	void delete(Long id);
+	void deleteByProperty(String property, Object value);
 }

@@ -75,5 +75,10 @@ public class BuildingServiceImpl implements BuildingService {
 	public void deleteBuilding(Long buildingid) {
 		buildingRepository.delete(buildingid);
 	}
+	@Override
+	public void deleteByProperty(String property, Object value) {
+		buildingRepository.deleteByProperty(property, value);
+		
+	}
 
 }
